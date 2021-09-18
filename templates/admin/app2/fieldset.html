@@ -1,0 +1,88 @@
+{% load myapp_tags %}
+
+<fieldset class="module aligned {{ fieldset.classes }}">
+    {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
+    {% if fieldset.description %}
+        <div class="description">{{ fieldset.description|safe }}</div>
+    {% endif %}
+    {% for line in fieldset %}
+        <div class="form-row{% if line.fields|length_is:'1' and line.errors %} errors{% endif %}{% if not line.has_visible_field %} hidden{% endif %}{% for field in line %}{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% endfor %}">
+            {% if line.fields|length_is:'1' %}{{ line.errors }}{% endif %}
+            {% for data in complete %}
+            <div>
+                <h1>{{ data.Categories }}<h1>
+
+                    {% with data.Candidates|split:',' as strs %}
+                     {% for str in strs %}
+                        <input onchange="change_var(this.id, this.value);" type="checkbox" id="{{ data.Categories }}${{ str }}" value="{{ str }}">
+                         <label for="{{ data.Categories }}${{ str }}">{{ str }}</label>
+                        <br>
+                        <br>
+                     {% endfor %}
+                 {% endwith %}
+            </div>
+            {% endfor %}
+            {% for field in line %}
+                <div{% if not line.fields|length_is:'1' %} class="fieldBox{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}{% if field.field.is_hidden %} hidden{% endif %}"{% elif field.is_checkbox %} class="checkbox-row"{% endif %}>
+                    {% if not line.fields|length_is:'1' and not field.is_readonly %}{{ field.errors }}{% endif %}
+                    {% if field.is_checkbox %}
+                        {{ field.field }}{{ field.label_tag }}
+                    {% else %}
+             <span style="display : none;"> {{ field.label_tag }} </span>
+                        {% if field.is_readonly %}
+                            <div class="readonly">{{ field.contents }}</div>
+                        {% else %}
+                            <span style="display : none;">{{ field.field }}</span>
+                        {% endif %}
+                    {% endif %}
+                    {% if field.field.help_text %}
+                        <div class="help">{{ field.field.help_text|safe }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+</fieldset>
+
+
+<script>
+
+window.onload = get_var;
+
+function get_var()
+{
+    var data_val = document.getElementById('id_Data').value;
+
+    const myArr = data_val.split(",");
+
+    for (let x in myArr){
+       document.getElementById(myArr[x]).checked = true;
+    }
+
+}
+
+
+function change_var(id, values)
+{
+    var data_val = document.getElementById('id_Data');
+    var checked_item = document.getElementById(id);
+
+    if(checked_item.checked)
+    {
+        if(data_val.value)
+            data_val.value = data_val.value + "," + id
+        else
+            data_val.value = id
+    }
+    else
+    {
+        data_val.value = data_val.value.replace(id, "");
+        data_val.value = data_val.value.replace(",,", ",");
+
+        if(data_val.value[0] == ",")
+        {
+            data_val.value = data_val.value.slice(1);
+        }
+    }
+}
+</script>

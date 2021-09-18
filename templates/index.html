@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for key, value in result.items  %}
+<div>
+   <h1> {{ key }}</h1>
+    {% for i, j in value.items %}
+
+        <h3>{{ i }} - {{ j }}</h3>
+
+    {% endfor %}
+</div>
+{% endfor %}
+</body>
+</html>
