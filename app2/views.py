@@ -21,13 +21,13 @@ def find_invalid_votes(voted, cats, threshold):
     for j in cats:
         count_l.append(count_m.count(j))
 
-    print(count_l)
-    print(threshold)
+    # print(count_l)
+    # print(threshold)
 
     remove_list = []
 
     for i in range(len(count_l)):
-        if count_l[i] != threshold[i]:
+        if count_l[i] > threshold[i]: # changed to greater than threshold
             remove_list.append(i)
 
     remove_list_main = []
@@ -35,7 +35,9 @@ def find_invalid_votes(voted, cats, threshold):
     for i in remove_list:
         remove_list_main.append(cats[i])
 
-    print(voted)
+    print(remove_list_main, "is/are removed.")
+
+    # print(voted)
 
     temperory = tuple(voted)
 
@@ -45,15 +47,29 @@ def find_invalid_votes(voted, cats, threshold):
     for i in enumerate(voted):
         variable = i[1].split("$")
 
-        t = t + 1
-
         if variable[0] in remove_list_main:
-            print(i[0])
+            t = t + 1
             temperory.pop(i[0] - t)
 
-    print(temperory)
+    # print(temperory)
 
     return temperory
+
+
+def numpy_filler(array):
+    row_lengths = []
+
+    for row in array:
+        row_lengths.append(len(row))
+
+    max_length = max(row_lengths)
+    print(max_length)
+
+    for row in array:
+        while len(row) < max_length:
+            row.append(None)
+
+    balanced_array = np.array(array)
 
 
 def winner(request):
@@ -68,14 +84,21 @@ def winner(request):
         thres.append(i['Threshold'])
         cands.append(i['Candidates'].split(','))
 
+    numpy_filler(cands)
+
+    print(cands)
+    print(np.shape(cands))
+
     results = np.zeros(np.shape(cands), dtype=int)
+
+    print(results)
 
     complete = list(complete.values())
 
     for data in complete:
         voted = data['Data'].split(',')
 
-        voted = find_invalid_votes(voted, cats, thres)
+        voted = find_invalid_votes(voted, cats, thres) # to find the invalid votes.
 
         for i in voted:
             variable = i.split("$")

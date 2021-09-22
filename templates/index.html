@@ -2,15 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Vote Counting System</title>
 </head>
 <body>
+<center><h1 style="font-size:50px;"><B><U>Online Voting System</U></B></h1></center>
 {% for key, value in result.items  %}
 <div>
-   <h1> {{ key }}</h1>
+   <h2 style="font-size:35px;"> {{ key }}</h2>
     {% for i, j in value.items %}
 
-        <h3>{{ i }} - {{ j }}</h3>
+    {% if i != None %}
+
+        <h4>{{ i }} - {{ j }}</h4>
+
+    {% endif %}
 
     {% endfor %}
 </div>

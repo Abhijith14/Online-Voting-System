@@ -12,3 +12,6 @@ class project(models.Model):
     def __str__(self):
         return str(self.id)
 
+    class Meta:
+        verbose_name = "Vote"
+

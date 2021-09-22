@@ -6,7 +6,7 @@ from django.db import models
 class datastore(models.Model):
     Categories = models.CharField(max_length=3000, default='')
     Threshold = models.IntegerField(default=1, null=False)
-    Candidates = models.CharField(max_length=10000, default='')
+    Candidates = models.TextField(max_length=10000, default='')
 
     def __str__(self):
         return str(self.Categories) + " (" + str(len(str(self.Candidates).split(","))) + ")"

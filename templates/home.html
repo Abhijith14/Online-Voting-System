@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vote Counting System</title>
+    <style>
+        /* select all <a> elements with class "button" */
+        a.button {
+          /* use inline-block because it respects padding */
+          display: inline-block;
+          /* padding creates clickable area around text (top/bottom, left/right) */
+          padding: 1em 3em;
+          /* round corners */
+          border-radius: 5px;
+          /* remove underline */
+          text-decoration: none;
+          /* set colors */
+          color: white;
+          background-color: #4E9CAF;
+        }
+
+        .center {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+.center-txt {
+  text-align: center;
+}
+
+    </style>
+</head>
+<body style="background-color:black;">
+<center><h1 style="font-size:50px; color:white;"><B><U>Online Voting System</U></B></h1></center>
+
+<div class="center">
+    <center>
+<a class="button" href="/admin/">Admin Panel</a>
+
+<a class="button center-txt" href="/results/">Get Results</a>
+        </center>
+</div>
+</body>
+</html>

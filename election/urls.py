@@ -18,8 +18,11 @@ from django.urls import path
 
 from app2.views import winner
 
+from app1.views import homepage
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('results/', winner, name="results"),
+    path('', homepage, name="home"),
 ]
 

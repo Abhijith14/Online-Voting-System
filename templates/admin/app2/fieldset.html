@@ -10,7 +10,7 @@
             {% if line.fields|length_is:'1' %}{{ line.errors }}{% endif %}
             {% for data in complete %}
             <div>
-                <h1>{{ data.Categories }}<h1>
+                <h1><B>{{ data.Categories }}</B><h1>
 
                     {% with data.Candidates|split:',' as strs %}
                      {% for str in strs %}
