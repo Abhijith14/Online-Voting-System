@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Candidates</title>
+</head>
+<body {% if message %} onload="alert('{{ message }}');   {% endif %}">
+
+<input type="hidden" name="messages_txt" id="messages_txt" value="{{ message }}" onchange="alert(this.value);">
+
+<form method="POST" action="{% url 'add_code' %}">
+    {% csrf_token %}
+
+    <input type="hidden" name="id_C" id="id_C" value="{{ curr_id }}">
+
+    <label for="name_C">Name of the Candidate : </label>
+    <input type="text" name="name_C" id="name_C" placeholder="Enter the Candidates Name">
+
+    <br>
+    <br>
+
+    <label for="role_C">Role : </label>
+    <select name="role_C" id="role_C">
+        <option value="President">President</option>
+        <option value="Vice President">Vice President</option>
+        <option value="General Secretary">General Secretary</option>
+        <option value="Joint Secretary">Joint Secretary</option>
+        <option value="Treasurer">Treasurer</option>
+        <option value="E.C.Members">E.C.Members</option>
+        <option value="E.C.Member(Women)">E.C.Member(Women)</option>
+        <option value="Warden">Warden</option>
+    </select>
+
+    <br><br>
+
+    <input type="submit" name="subBtn" id="subBtn" value="Add Candidate">
+
+</form>
+
+<script>
+    function reloadIt() {
+    if (window.location.href.substr(-2) !== "?r") {
+        window.location = window.location.href + "?r";
+    }
+}
+</script>
+
+</body>
+</html>

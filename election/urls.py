@@ -16,13 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from app2.views import winner
+from app1.views import add_candidates_view, add_candidates_code, homepage_view, start_category_voting, start_voting, get_results
 
-from app1.views import homepage
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('results/', winner, name="results"),
-    path('', homepage, name="home"),
+    path('', homepage_view, name="home"),
+    path('add_C', add_candidates_view, name="add_C"),
+    path('start_vote/', start_voting, name="start_vote"),
+    path('add_code', add_candidates_code, name="add_code"),
+    path('add_vote/', start_category_voting, name='add_vote'),
+    path('results/', get_results, name='results'),
 ]
-

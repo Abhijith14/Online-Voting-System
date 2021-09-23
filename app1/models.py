@@ -2,15 +2,15 @@ from django.db import models
 
 # Create your models here.
 
-
-class datastore(models.Model):
-    Categories = models.CharField(max_length=3000, default='')
-    Threshold = models.IntegerField(default=1, null=False)
-    Candidates = models.TextField(max_length=10000, default='')
+class add_c_model(models.Model):
+    id = models.IntegerField(primary_key=True)
+    Candidate = models.CharField(max_length=2000, default='')
+    Category = models.CharField(max_length=2000, default='')
+    Votes = models.IntegerField(default=0)
 
     def __str__(self):
-        return str(self.Categories) + " (" + str(len(str(self.Candidates).split(","))) + ")"
-
+        # return str(self.Candidate)
+        return str(self.Candidate)
     class Meta:
-        verbose_name = "Admin Database"
+        verbose_name = "Add Candidates"
 

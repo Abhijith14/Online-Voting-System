@@ -10,6 +10,10 @@
           display: inline-block;
           /* padding creates clickable area around text (top/bottom, left/right) */
           padding: 1em 3em;
+
+          /* fix width */
+          width: 150px;
+
           /* round corners */
           border-radius: 5px;
           /* remove underline */
@@ -24,21 +28,39 @@
   width: 50%;
   padding: 10px;
 }
-.center-txt {
-  text-align: center;
-}
 
     </style>
 </head>
 <body style="background-color:black;">
-<center><h1 style="font-size:50px; color:white;"><B><U>Online Voting System</U></B></h1></center>
+<center><h1 style="font-size:50px; color:white;"><B>Online Voting System</B></h1></center>
+
+
 
 <div class="center">
     <center>
-<a class="button" href="/admin/">Admin Panel</a>
-
-<a class="button center-txt" href="/results/">Get Results</a>
+<a class="button" href="add_vote?cat=President">Vote President</a><br><br>
+<a class="button" href="add_vote?cat=Vice President">Vote Vice President</a><br><br>
+<a class="button" href="add_vote?cat=General Secretary">Vote General Secretary</a><br><br>
+<a class="button" href="add_vote?cat=Joint Secretary">Vote Joint Secretary</a><br><br>
+<a class="button" href="add_vote?cat=Treasurer">Vote Treasurer</a><br><br>
+<a class="button" href="add_vote?cat=E.C.Members">Vote E.C.Members</a><br><br>
+<a class="button" href="add_vote?cat=E.C.Member(Women)">Vote E.C.Member(Women)</a><br><br>
+<a class="button" href="add_vote?cat=Warden">Vote Warden</a><br>
         </center>
 </div>
+
+
+<br><br><br>
+
+
+
+<div class="center">
+    <center>
+<a class="button" href="{% url 'add_C' %}">Add Candidates</a>
+
+<a class="button" href="{% url 'results' %}">Get Results</a>
+        </center>
+</div>
+
 </body>
 </html>
