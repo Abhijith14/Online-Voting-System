@@ -2,25 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
     <title>Add Candidates</title>
 </head>
-<body {% if message %} onload="alert('{{ message }}');   {% endif %}">
+<body {% if message %} onload="alert('{{ message }}');   {% endif %}" style="background-color:#FFA07A;">
 
 <input type="hidden" name="messages_txt" id="messages_txt" value="{{ message }}" onchange="alert(this.value);">
 
 <form method="POST" action="{% url 'add_code' %}">
     {% csrf_token %}
 
+    <div style="margin-top: 250px;">
+
     <input type="hidden" name="id_C" id="id_C" value="{{ curr_id }}">
+    <center>
+    <label for="name_C" style="font-size: 35px; ">Name of the Candidate : </label>
+    <input type="text" name="name_C" id="name_C" placeholder="Enter the Candidates Name" style="width:400px; font-size: 25px;">
 
-    <label for="name_C">Name of the Candidate : </label>
-    <input type="text" name="name_C" id="name_C" placeholder="Enter the Candidates Name">
 
     <br>
     <br>
 
-    <label for="role_C">Role : </label>
-    <select name="role_C" id="role_C">
+    <label for="role_C" style="font-size: 35px; ">Role : </label>
+    <select name="role_C" id="role_C" style="width:400px; font-size: 25px;">
         <option value="President">President</option>
         <option value="Vice President">Vice President</option>
         <option value="General Secretary">General Secretary</option>
@@ -32,9 +42,11 @@
     </select>
 
     <br><br>
+    <input type="button" class="btn btn-success" style="font-size: 20px;" name="homeBtn" id="homeBtn" value="Go to Home" onclick="location.href='{% url 'home' %}';">
+    <input type="submit" class="btn btn-success" style="font-size: 20px;"  name="subBtn" id="subBtn" value="Add Candidate">
 
-    <input type="submit" name="subBtn" id="subBtn" value="Add Candidate">
-
+        </center>
+</div>
 </form>
 
 <script>
