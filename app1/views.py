@@ -12,6 +12,7 @@ from pytesseract import Output
 
 import os.path
 import collections
+from wsgiref.util import FileWrapper
 
 import project_files
 
@@ -267,6 +268,14 @@ def sort_by_votes(listele):
     return final_list
 
 
+def download_file(file, filename):
+    f = open(file, "rb")
+    response = HttpResponse(FileWrapper(f), content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename=' + filename
+    f.close()
+    return response
+
+
 def get_results(request):
     objects = add_c_model.objects.all()
     objects = list(objects.values())
@@ -304,33 +313,26 @@ def get_results(request):
         else:
             create_img(i)
 
-    # print(saved_files)
+    print(saved_files)
 
-    # image1 = Image.open('project_files/output/' + saved_files[0]).convert('RGB')
+    image1 = Image.open('project_files/output/' + saved_files[0]).convert('RGB')
 
-    # imagelist = []
+    imagelist = []
+
+    for i in saved_files[1:]:
+        imagelist.append(Image.open('project_files/output/' + i).convert('RGB'))
+
+
+
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    image1.save(BASE_DIR + r'\results\results.pdf', save_all=True, append_images=imagelist)
+
+
+    return homepage_view(request)
+
+    # response = download_file(file="project_files/result/results.pdf", filename="results.pdf")
     #
-    # for i in saved_files[1:]:
-    #     imagelist.append(Image.open('project_files/output/' + i).convert('RGB'))
-    #
-    # image1.save('project_files/result/results.pdf', save_all=True, append_images=imagelist)
-
-
-    # download
-    # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    # filename = '/project_files/result/results.pdf'
-    # filepath = BASE_DIR + filename
-    #
-    # image_buffer = open(filepath, "rb").read()
-    #
-    # mime_type, _ = mimetypes.guess_type(filepath)
-    # print(mime_type)
-
-    # Set the return value of the HttpResponse
-    # response = HttpResponse(image_buffer, content_type=mime_type)
-    # Set the HTTP header for sending to browser
-    # response['Content-Disposition'] = "attachment; filename=%s" % filename
-    # Return the response value
     # return response
 
 
