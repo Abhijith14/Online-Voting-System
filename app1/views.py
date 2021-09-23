@@ -11,6 +11,7 @@ import pytesseract
 from pytesseract import Output
 
 import os.path
+import collections
 
 import project_files
 
@@ -239,6 +240,33 @@ def splitting_data(data):
     return temp
 
 
+def sort_by_votes(listele):
+
+    # print(listele)
+
+    temp = {}
+    final_list = []
+    c = 0
+    for i in listele:
+        print(i)
+        temp[c] = i['Votes']
+        c = c + 1
+
+    print(temp)
+
+    # temp = collections.OrderedDict(sorted(temp.items(), reverse=True))
+    temp = collections.OrderedDict(sorted(temp.items(), reverse=True, key=lambda kv: (kv[1], kv[0])))
+
+    print(temp)
+
+    for i in list(temp.keys()):
+        final_list.append(listele[i])
+
+    print(final_list)
+
+    return final_list
+
+
 def get_results(request):
     objects = add_c_model.objects.all()
     objects = list(objects.values())
@@ -261,10 +289,14 @@ def get_results(request):
         elif i['Category'] == "Warden":
             l8.append(i)
 
-    dataset = [l1, l2, l3, l4, l5, l6, l7, l8]
+    # create_img(l3)
+    # create_img(sort_by_votes(l2))
+    #
+    #
+    dataset = [sort_by_votes(l1), sort_by_votes(l2), sort_by_votes(l3), sort_by_votes(l4), sort_by_votes(l5),
+               sort_by_votes(l6), sort_by_votes(l7), sort_by_votes(l8)]
 
     for i in dataset:
-        print(i)
         if len(i) > 10:
             splitted = splitting_data(i)
             for splt in splitted:
@@ -272,33 +304,33 @@ def get_results(request):
         else:
             create_img(i)
 
-    print(saved_files)
+    # print(saved_files)
 
-    image1 = Image.open('project_files/output/' + saved_files[0]).convert('RGB')
+    # image1 = Image.open('project_files/output/' + saved_files[0]).convert('RGB')
 
-    imagelist = []
-
-    for i in saved_files[1:]:
-        imagelist.append(Image.open('project_files/output/' + i).convert('RGB'))
-
-    image1.save('project_files/result/results.pdf', save_all=True, append_images=imagelist)
+    # imagelist = []
+    #
+    # for i in saved_files[1:]:
+    #     imagelist.append(Image.open('project_files/output/' + i).convert('RGB'))
+    #
+    # image1.save('project_files/result/results.pdf', save_all=True, append_images=imagelist)
 
 
     # download
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    filename = '/project_files/result/results.pdf'
-    filepath = BASE_DIR + filename
-
-    image_buffer = open(filepath, "rb").read()
-
-    mime_type, _ = mimetypes.guess_type(filepath)
-    print(mime_type)
+    # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # filename = '/project_files/result/results.pdf'
+    # filepath = BASE_DIR + filename
+    #
+    # image_buffer = open(filepath, "rb").read()
+    #
+    # mime_type, _ = mimetypes.guess_type(filepath)
+    # print(mime_type)
 
     # Set the return value of the HttpResponse
-    response = HttpResponse(image_buffer, content_type=mime_type)
+    # response = HttpResponse(image_buffer, content_type=mime_type)
     # Set the HTTP header for sending to browser
-    response['Content-Disposition'] = "attachment; filename=%s" % filename
+    # response['Content-Disposition'] = "attachment; filename=%s" % filename
     # Return the response value
-    return response
+    # return response
 
 
