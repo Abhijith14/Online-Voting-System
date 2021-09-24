@@ -1,7 +1,7 @@
 import mimetypes
 
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from .models import add_c_model
 
@@ -18,12 +18,12 @@ import project_files
 
 # Create your views here.
 
-threshold = {'President' : 1,
-             'Vice President' : 2,
+threshold = {'President': 1,
+             'Vice President': 2,
              'General Secretary': 1,
              'Joint Secretary': 1,
              'Treasurer': 1,
-             'E.C.Members' : 9,
+             'E.C.Members': 9,
              'E.C.Member(Women)': 1,
              'Warden': 1}
 
@@ -37,6 +37,7 @@ def homepage_view(request):
 
 
 def start_voting(request):
+    alert = ''
     if request.method == "POST":
 
         object = add_c_model.objects.all()
@@ -47,8 +48,7 @@ def start_voting(request):
         variables.remove('cat')
         variables.remove('subBtn')
 
-        print(variables)
-
+        # print(variables)
         if len(variables) > 0:
             for i in variables:
                 object1 = list(object.filter(id=int(i)).values())
@@ -57,17 +57,30 @@ def start_voting(request):
                 cate = object1[0]['Category']
 
                 if len(variables) <= threshold[cate]:
-                    print(curr_v)
-                    data = add_c_model(id=int(i), Candidate=cand, Category=cate, Votes=curr_v+1)
+                    data = add_c_model(id=int(i), Candidate=cand, Category=cate, Votes=curr_v + 1)
                     data.save()
                 else:
                     print("Greater than threshold !!!!")
+                    alert = 'Invalid Vote !!'
 
-    return start_category_voting(request)
+    # return start_category_voting(request)
+
+    category = request.POST.get('cat')
+    object = add_c_model.objects.all()
+    object = list(object.filter(Category=category).values())
+
+    context = {}
+
+    context['Heading'] = category
+
+    context['Data'] = object
+
+    context['Alert'] = alert
+
+    return render(request, 'add_votes.html', context)
 
 
 def start_category_voting(request):
-
     if request.method == "GET":
         category = request.GET.get('cat')
     elif request.method == "POST":
@@ -83,6 +96,24 @@ def start_category_voting(request):
     context['Data'] = object
 
     return render(request, 'add_votes.html', context)
+
+
+def clear_vote(request):
+
+    cat = request.GET.get('id')
+
+    object = add_c_model.objects.all()
+    object1 = list(object.filter(Category=cat).values())
+
+    for i in object1:
+        data = add_c_model(id=int(i['id']), Candidate=i['Candidate'], Category=i['Category'], Votes=0)
+        data.save()
+
+
+    # print(object)
+
+
+    return redirect('home')
 
 
 def add_candidates_view(request):
@@ -111,7 +142,6 @@ def add_candidates_code(request):
         id_C = request.POST.get('id_C')
 
         print("HELLO", id_C)
-
 
         object = add_c_model.objects.all()
 
@@ -172,7 +202,7 @@ def heading(img, txt):
     font = ImageFont.truetype('project_files/fonts/Montserrat-ExtraBold.ttf', 70)
     draw = ImageDraw.Draw(img)
 
-    x = ((1761049**0.5) - find_text_distance(txt, font))/2
+    x = ((1761049 ** 0.5) - find_text_distance(txt, font)) / 2
     y = 154
 
     draw.text(xy=(x, y), text=txt, fill=(0, 0, 0), font=font)
@@ -199,7 +229,6 @@ def votes(img, txt, num):
 
 
 def create_img(data):
-
     global saved_files
 
     category_txt = data[0]['Category']
@@ -213,19 +242,18 @@ def create_img(data):
         names(img, data[i]['Candidate'], 43 + (97 * i))
         votes(img, str(data[i]['Votes']), 43 + (97 * i))
 
-
     base_dir = 'project_files/output/'
     filename = '{}'.format(category_txt) + ".png"
 
     n = 1
-    while os.path.isfile(base_dir+filename):
+    while os.path.isfile(base_dir + filename):
         filename = '{}'.format(category_txt) + "(" + str(n) + ").png"
         n = n + 1
 
     print("Saving ", filename)
     saved_files.append(filename)
 
-    img.save(base_dir+filename)
+    img.save(base_dir + filename)
 
 
 def splitting_data(data):
@@ -242,28 +270,26 @@ def splitting_data(data):
 
 
 def sort_by_votes(listele):
-
     # print(listele)
 
     temp = {}
     final_list = []
     c = 0
     for i in listele:
-        print(i)
+        # print(i)
         temp[c] = i['Votes']
         c = c + 1
 
-    print(temp)
+    # print(temp)
 
-    # temp = collections.OrderedDict(sorted(temp.items(), reverse=True))
     temp = collections.OrderedDict(sorted(temp.items(), reverse=True, key=lambda kv: (kv[1], kv[0])))
 
-    print(temp)
+    # print(temp)
 
     for i in list(temp.keys()):
         final_list.append(listele[i])
 
-    print(final_list)
+    # print(final_list)
 
     return final_list
 
@@ -322,17 +348,15 @@ def get_results(request):
     for i in saved_files[1:]:
         imagelist.append(Image.open('project_files/output/' + i).convert('RGB'))
 
-
-
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
     image1.save(BASE_DIR + r'\results\results.pdf', save_all=True, append_images=imagelist)
 
+    if True:
+        return redirect('home')
 
     return homepage_view(request)
 
     # response = download_file(file="project_files/result/results.pdf", filename="results.pdf")
     #
     # return response
-
-

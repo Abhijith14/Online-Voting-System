@@ -54,10 +54,29 @@ tr:nth-child(even) {
   -webkit-transition-duration: 0.4s; /* Safari */
   transition-duration: 0.4s;
 }
+
+.button3 {
+  background-color: red; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+
 .button:hover {
   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
 }
 .button2:hover {
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+.button3:hover {
   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
 }
 
@@ -66,8 +85,12 @@ tr:nth-child(even) {
 </head>
 <body>
 <center><h1 style="font-size:40px;"><B>{{ Heading }}</B></h1></center>
+    <button class="button3" style="float:right;" onclick="location.href='/clear?id={{ Heading }}';">Clear Votes</button>
 
 <div style="padding:100px;">
+    {% if Alert %}
+    <h2 style="background-color:red; width:150px;">Invalid Vote !!</h2>
+    {% endif %}
     <form method="POST" action="/start_vote/">
          {% csrf_token %}
     <table>
